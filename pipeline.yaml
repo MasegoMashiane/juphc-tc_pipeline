@@ -7,8 +7,9 @@ spec:
     - name: pipeline-workspace
     - name: dockerconfig-ws
   params:
-    - name: build-image
     - name: repo-url
+    - name: app-name
+      default: tax-calculator
     - name: branch
       default: main
   tasks:
@@ -44,7 +45,7 @@ spec:
       runAfter:
         - clone
 
-      - name: tests
+    - name: tests
       workspaces:
         - name: source
           workspace: pipeline-workspace
@@ -53,7 +54,7 @@ spec:
       runAfter:
         - npminstall
 
-          - name: build
+    - name: build
       workspaces:
         - name: source
           workspace: pipeline-workspace
@@ -64,6 +65,6 @@ spec:
         kind: ClusterTask
       params:
         - name: IMAGE
-          value: "us.icr.io/$(context.pipelineRun.namespace)/$(params.app-name)"
+          value: "us.icr.io/sn-labs-mashianemlb/$(params.app-name)"
       runAfter:
         - tests
